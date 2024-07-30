@@ -1,0 +1,61 @@
+name: Release
+
+on:
+  release:
+    types:
+      - created
+
+# Releases need permissions to read and write the repository contents.
+# GitHub considers creating releases and uploading assets as writing contents.
+permissions:
+  contents: write
+
+env:
+  TAG: ${{ github.event.release.tag_name }} 
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          fetch-depth: 0
+
+      - name: Install bosh-cli and tile
+        run: |
+          BOSHREL=$(basename $(curl -Ls -o /dev/null -w %{url_effective} https://github.com/cloudfoundry/bosh-cli/releases/latest) | sed s/v//g)
+          curl -sSLo /tmp/bosh https://github.com/cloudfoundry/bosh-cli/releases/latest/download/bosh-cli-${BOSHREL}-linux-amd64
+          chmod +x /tmp/bosh && sudo mv /tmp/bosh /usr/local/bin/bosh
+
+          curl -sSLo /tmp/tile https://github.com/cf-platform-eng/tile-generator/releases/latest/download/tile_linux-64bit
+          chmod +x /tmp/tile && sudo mv /tmp/tile /usr/local/bin/tile
+
+      - name: Download falcon-installer
+        run: |
+          REL=$(basename $(curl -Ls -o /dev/null -w %{url_effective} https://github.com/CrowdStrike/falcon-installer/releases/latest) | sed s/v//g)
+          curl -sSLo falcon-installer-linux-x86_64.tar.gz https://github.com/CrowdStrike/falcon-installer/releases/latest/download/falcon-installer-${REL}-linux-x86_64.tar.gz
+          tar -xzf falcon-installer-linux-x86_64.tar.gz -C /tmp
+          rm -f falcon-installer-linux-x86_64.tar.gz
+          cp /tmp/falcon-installer src/
+          bosh add-blob src/falcon-installer falcon-installer
+
+      - name: Create bosh release
+        run: |
+          VERSION=$(echo $GITHUB_REF_NAME | sed s/v//g)
+          bosh create-release --force --final --tarball=resources/falcon-boshrelease.tgz --version ${VERSION}
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+
+      - name: Create pivotal tile
+        run: |
+          VERSION=$(echo $TAG | sed s/v//g)
+          tile build ${VERSION}
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+
+      - name: Update artifacts to release
+        run: |
+          gh release upload $TAG resources/falcon-boshrelease.tgz product/*.pivotal
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.event.release.tag_name }}
