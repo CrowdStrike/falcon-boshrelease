@@ -1,0 +1,17 @@
+*.swp
+*~
+*#
+tmp
+.DS_Store
+
+releases/*.tgz
+.blobs
+.dev_builds
+blobs/*
+!blobs/.gitkeep
+config/*
+!config/final.yml
+
+*.tar.gz
+*.zip
+*.deb

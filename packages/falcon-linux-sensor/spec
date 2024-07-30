@@ -1,0 +1,7 @@
+---
+name: falcon-linux-sensor
+
+dependencies: []
+
+files:
+  - falcon-installer
