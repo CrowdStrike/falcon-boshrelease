@@ -13,7 +13,6 @@ tmp/
 dev_releases/
 config/private.yml
 metadata
-blobstore/
 product/
 release/
 releases/*.tgz

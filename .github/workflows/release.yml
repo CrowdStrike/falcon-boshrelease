@@ -34,28 +34,37 @@ jobs:
         run: |
           REL=$(basename $(curl -Ls -o /dev/null -w %{url_effective} https://github.com/CrowdStrike/falcon-installer/releases/latest) | sed s/v//g)
           curl -sSLo falcon-installer-linux-x86_64.tar.gz https://github.com/CrowdStrike/falcon-installer/releases/latest/download/falcon-installer-${REL}-linux-x86_64.tar.gz
-          tar -xzf falcon-installer-linux-x86_64.tar.gz -C /tmp
+          tar -xzf falcon-installer-linux-x86_64.tar.gz
           rm -f falcon-installer-linux-x86_64.tar.gz
-          cp /tmp/falcon-installer src/
-          bosh add-blob src/falcon-installer falcon-installer
+          cp falcon-installer final_blobs/falcon-installer
+          bosh add-blob final_blobs/falcon-installer falcon-installer
+          rm final_blobs/falcon-installer
+
+      - name: Set Release Version
+        run: |
+          echo "VERSION=$(echo $TAG | sed s/v//g)" >> $GITHUB_ENV
 
       - name: Create bosh release
         run: |
-          VERSION=$(echo $GITHUB_REF_NAME | sed s/v//g)
           bosh create-release --force --final --tarball=resources/falcon-boshrelease.tgz --version ${VERSION}
-        env:
-          TAG: ${{ github.event.release.tag_name }}
 
       - name: Create pivotal tile
         run: |
-          VERSION=$(echo $TAG | sed s/v//g)
+          sed "s/^[ ]\+version: .*/      version: $VERSION/g" -i tile.yml
           tile build ${VERSION}
-        env:
-          TAG: ${{ github.event.release.tag_name }}
+
+      - name: Update release artifacts in GitHub
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add final_blobs config releases tile.yml tile-history.yml
+          git commit -m "Updating release components for ${TAG}"
+          git push origin HEAD:${{ github.event.release.target_commitish }}
+          git tag -f "${GITHUB_REF#refs/tags/}"
+          git push origin "${GITHUB_REF#refs/tags/}" --force
 
       - name: Update artifacts to release
         run: |
           gh release upload $TAG resources/falcon-boshrelease.tgz product/*.pivotal
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG: ${{ github.event.release.tag_name }}
