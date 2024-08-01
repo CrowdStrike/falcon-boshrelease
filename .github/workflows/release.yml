@@ -35,8 +35,8 @@ jobs:
           REL=$(basename $(curl -Ls -o /dev/null -w %{url_effective} https://github.com/CrowdStrike/falcon-installer/releases/latest) | sed s/v//g)
           curl -sSLo falcon-installer-linux-x86_64.tar.gz https://github.com/CrowdStrike/falcon-installer/releases/latest/download/falcon-installer-${REL}-linux-x86_64.tar.gz
           tar -xzf falcon-installer-linux-x86_64.tar.gz
-          rm -f falcon-installer-linux-x86_64.tar.gz
-          cp falcon-installer final_blobs/falcon-installer
+          chmod +x falcon-installer && rm -f falcon-installer-linux-x86_64.tar.gz
+          cp -p falcon-installer final_blobs/falcon-installer
           bosh add-blob final_blobs/falcon-installer falcon-installer
           rm final_blobs/falcon-installer
 
