@@ -210,7 +210,7 @@ runtime_configs:
   runtime_config:
     releases:
     - name: falcon-linux-sensor
-      version: 0.0.1
+      version: 1.0.0
     addons:
     - name: falcon-linux-sensor
       jobs:

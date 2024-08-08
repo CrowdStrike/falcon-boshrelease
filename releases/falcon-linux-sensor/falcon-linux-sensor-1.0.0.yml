@@ -1,0 +1,21 @@
+name: falcon-linux-sensor
+version: 1.0.0
+commit_hash: ec3c970
+uncommitted_changes: true
+jobs:
+- name: falcon-linux-sensor
+  version: d2071f06f01fd9e99e87f7593df32e413e4921d5fcd723acf30050eaadf74e5d
+  fingerprint: d2071f06f01fd9e99e87f7593df32e413e4921d5fcd723acf30050eaadf74e5d
+  sha1: sha256:b4384b1d023d926b0e10ec523521c3999593b76534c37e9999d2988fd863aa47
+  packages:
+  - falcon-linux-sensor
+packages:
+- name: falcon-linux-sensor
+  version: c48f36b9aaf9891c2ac6a9dd905d8fcd17bc08c61dbb0eb4c3d4abf155d88837
+  fingerprint: c48f36b9aaf9891c2ac6a9dd905d8fcd17bc08c61dbb0eb4c3d4abf155d88837
+  sha1: sha256:0b3918c6f56c6c88d80afeff0ad57b464f3084885fba0c7b09e1ebb1c1f88bbf
+  dependencies: []
+license:
+  version: 205debb9fd314d2daf1f31088dc278a9aa33de3dbfc10cd87b6ff8ddd32afcc0
+  fingerprint: 205debb9fd314d2daf1f31088dc278a9aa33de3dbfc10cd87b6ff8ddd32afcc0
+  sha1: sha256:09e9c5c01ecff1dc0b90cfdae4de9ef1ef62c35b4e763b2370660fc333995284
