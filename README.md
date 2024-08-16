@@ -6,7 +6,7 @@ This project provides a Bosh release and Cloud Foundry tile for installing Crowd
 
 To install the CrowdStrike Sensor via VMware Tanzu Operations Manager, follow these steps:
 
-1. **Download the Tile**: Obtain the `crowdstrike-falcon-cf-VERSION.pivotal` file (where `VERSION` is the desired tile installation version) from [Broadcom's Support portal](https://support.broadcom.com).
+1. **Download the Tile**: Obtain the `crowdstrike-falcon-cf-VERSION.pivotal` file (where `VERSION` is the desired tile installation version) from [Broadcom's Support portal](https://support.broadcom.com/group/ecx/productdownloads?subfamily=CrowdStrike%20Falcon%20for%20VMware%20Tanzu).
 2. **Import the Tile**: Import the downloaded tile into VMware Tanzu Operations Manager.
 3. **Add the Tile to the Dashboard**: Add the `CrowdStrike Falcon for VMWare Tanzu` tile to the Installation Dashboard.
 4. **Configure the Tile**: Enter the OAuth Client ID and Secret.
