@@ -36,7 +36,7 @@ if [[ ! -f /opt/CrowdStrike/falconctl ]]; then
     export FALCON_SENSOR_UPDATE_POLICY_NAME="<%= p('falcon.sensor_update_policy') %>"
 <% end -%>
 
-    /var/vcap/packages/falcon-linux-sensor/falcon-installer --verbose --enable-logging --tmpdir /var/vcap/sys/log/falcon-linux-sensor/
+    /var/vcap/packages/falcon-linux-sensor/falcon-installer --user-agent="falcon-boshrelease/<%= p('version') %>" --verbose --enable-logging --tmpdir /var/vcap/sys/log/falcon-linux-sensor/
 fi
 
 if [ -n "$FALCON_ARGS" ] ; then

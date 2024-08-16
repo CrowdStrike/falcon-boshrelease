@@ -28,4 +28,5 @@ properties:
     description: "Sensor grouping tags are optional, user-defined identifiers that can used to group and filter hosts. Allowed characters: all alphanumerics, '/', '-', and '_'."
   falcon.sensor_update_policy:
     description: Name of the sensor update policy.
-
+  version:
+    description: Bosh release version
