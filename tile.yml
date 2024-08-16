@@ -71,6 +71,10 @@ packages:
 #   default: specify a value
 #   label: Label for the field on the GUI
 #   description: Longer description of the field's purpose
+properties:
+- name: version
+  type: string
+  value: 1.3.0
 
 # Uncomment this section if you want to display forms with configurable
 # properties in Ops Manager. These properties will be passed to your
@@ -210,7 +214,7 @@ runtime_configs:
   runtime_config:
     releases:
     - name: falcon-linux-sensor
-      version: 1.0.0
+      version: (( .properties.version.value ))
     addons:
     - name: falcon-linux-sensor
       jobs:
@@ -229,6 +233,7 @@ runtime_configs:
             provisioning_token: (( .properties.provisioning_token.value ))
             tags: (( .properties.tags.value ))
             sensor_update_policy: (( .properties.sensor_update_policy.value ))
+          version: (( .properties.version.value ))
       include:
         stemcell:
         - os: ubuntu-jammy

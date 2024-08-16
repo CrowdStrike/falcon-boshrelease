@@ -50,7 +50,7 @@ jobs:
 
       - name: Create pivotal tile
         run: |
-          sed "s/^[ ]\+version: .*/      version: $VERSION/g" -i tile.yml
+          sed "s/^[ ]\+value: [0-9.]*[0-9.]*[0-9.]*/  value: $VERSION/g" -i tile.yml
           tile build ${VERSION}
 
       - name: Update release artifacts in GitHub
