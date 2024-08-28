@@ -1,6 +1,6 @@
 # CrowdStrike Falcon Bosh Release
 
-The CrowdStrike Falcon Bosh Release leverages [Cloud Foundry Bosh](https://bosh.io/docs/) as an Addon to facilitate the installation of the Falcon Sensor on each Virtual Machine (VM) through the Falcon APIs. By default, the installer deployed via Bosh will handle the installation, registration of the sensor, and initiation of the service.
+The CrowdStrike Falcon Bosh Release leverages [Cloud Foundry Bosh](https://bosh.io/docs/) as an Addon to facilitate the installation of the Falcon Sensor on each Virtual Machine (VM) through the Falcon APIs. By default, the installer deployed via Bosh will handle the installation, registration of the sensor, and initiation of the service. 
 
 ## Requirements
 
@@ -8,8 +8,8 @@ To successfully deploy the CrowdStrike Falcon Bosh Release, ensure the following
 
 - **Access to Broadcom Portal**: You must have access to download necessary files from the Broadcom portal.
 - **VMWare Tanzu Operations Manager**: Ensure you have VMWare Tanzu Operations Manager installed.
-- **VMWare Tanzu Version**: The minimum supported version of VMWare Tanzu is 2.11.
-- **Supported Stemcells**: Currently, only Ubuntu Stemcells are supported.
+- **VMWare Tanzu Application Service Version**: The minimum supported version of VMWare Tanzu Application Service (TAS) is 2.11.
+- **Supported Stemcells**: Currently, all Ubuntu Stemcells are supported.
 - **Proxy Configuration**: If your environment uses a proxy, it must be configured to allow the VMs to communicate with CrowdStrike's cloud. For detailed information, refer to the [Falcon Sensor for Linux System Requirements](https://falcon.crowdstrike.com/documentation/page/edd7717e/falcon-sensor-for-linux-system-requirements#l0523dcd).
 
 ## Current Limitations
@@ -23,6 +23,7 @@ API clients are granted specific API scopes that allow access to certain CrowdSt
 > [!IMPORTANT]
 > - **Sensor Download** [read]: This scope is essential for downloading the sensor.
 > - **Sensor Update Policies** [read] (optional): This scope is required if you plan to configure the `Sensor Update Policy` via the VMWare Ops Manager UI.
+> - **Installation Tokens** [read] (optional): This scope is required if you plan on using installation tokens in your environment and want the installer to automatically attempt to discover them instead of manually adding it in the Bosh tile.
 
 ## Installation
 
