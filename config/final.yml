@@ -1,7 +1,6 @@
-name: falcon-linux-sensor
+name: falcon-sensor
 
 blobstore:
   provider: local
   options:
     blobstore_path: final_blobs
-

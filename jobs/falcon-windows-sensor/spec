@@ -1,11 +1,11 @@
 ---
-name: falcon-linux-sensor
+name: falcon-windows-sensor
 
 templates:
-  bin/pre-start.erb: bin/pre-start
+  bin/pre-start.ps1.erb: bin/pre-start.ps1
 
 packages:
-  - falcon-linux-sensor
+  - falcon-windows-sensor
 
 properties:
   oauth.client_id:
@@ -24,6 +24,8 @@ properties:
     description: The proxy port for the sensor to use when communicating with CrowdStrike
   falcon.provisioning_token:
     description: The provisioning token to use for installing the sensor
+  falcon.provisioning_wait_time:
+    description: The time in milliseconds to wait for the sensor to be provisioned
   falcon.tags:
     description: "Sensor grouping tags are optional, user-defined identifiers that can used to group and filter hosts. Allowed characters: all alphanumerics, '/', '-', and '_'."
   falcon.sensor_update_policy:

@@ -1,0 +1,7 @@
+---
+name: falcon-windows-sensor
+
+dependencies: []
+
+files:
+  - falcon-installer.exe

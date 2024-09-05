@@ -20,6 +20,9 @@ properties:
   type: string
   label: Author
   value: CrowdStrike
+- name: version
+  type: string
+  value: 1.1.0
 
 # Specify the packages to be included in your tile.
 # The format of the section to include depends on the type
@@ -37,7 +40,6 @@ packages:
 #    buildpack: java_buildpack_offline
 #   command: python app.py
 #   memory: 256M
-
 
 # New bosh release package with standalone job
 # - name: my-bosh-release
@@ -71,17 +73,13 @@ packages:
 #   default: specify a value
 #   label: Label for the field on the GUI
 #   description: Longer description of the field's purpose
-properties:
-- name: version
-  type: string
-  value: 1.1.0
 
 # Uncomment this section if you want to display forms with configurable
 # properties in Ops Manager. These properties will be passed to your
 # applications as environment variables. You can also refer to them
 # elsewhere in this template by using:
 #     (( .properties.<property-name> ))
-# 
+#
 # forms:
 # - name: buildpack_properties
 #   label: Buildpack
@@ -101,21 +99,21 @@ forms:
     type: string
     label: OAuth Client ID
     constraints:
-    - must_match_regex: '^[a-fA-F0-9]{32}$'
-      error_message: 'Invalid OAuth Client ID format. Please use a valid OAuth Client ID.'
+    - must_match_regex: "^[a-fA-F0-9]{32}$"
+      error_message: "Invalid OAuth Client ID format. Please use a valid OAuth Client ID."
   - name: client_secret
     type: secret
     label: OAuth Client Secret
     constraints:
-    - must_match_regex: '^[a-zA-Z0-9]{40}$'
-      error_message: 'Invalid OAuth Client Secret format. Please use a valid OAuth Client Secret.'
+    - must_match_regex: "^[a-zA-Z0-9]{40}$"
+      error_message: "Invalid OAuth Client Secret format. Please use a valid OAuth Client Secret."
   - name: cloud
     type: string
-    label: Falcon Cloud Region (e.g. us-1, us-2, eu-1, gov1)
+    label: Falcon Cloud Region (e.g. us-1, us-2, eu-1, gov1). Default is autodiscover.
     optional: true
     constraints:
-    - must_match_regex: '^(us-1|us-2|eu-1|gov1|)$'
-      error_message: 'Invalid CrowdStrike region. Please provide a valid region or remove the entry for autodiscover.'
+    - must_match_regex: "^(us-1|us-2|eu-1|gov1|)$"
+      error_message: "Invalid CrowdStrike region. Please provide a valid region or remove the entry for autodiscover."
 
 - name: falcon
   label: Falcon Sensor Settings
@@ -127,8 +125,8 @@ forms:
     description: Falcon Customer ID (CID) with Checksum (Optional)
     optional: true
     constraints:
-    - must_match_regex: '^[0-9a-fA-F]{32}-[0-9a-fA-F]{2}$'
-      error_message: 'Invalid CID format. Please use a valid CID with checksum.'
+    - must_match_regex: "^[0-9a-fA-F]{32}-[0-9a-fA-F]{2}$"
+      error_message: "Invalid CID format. Please use a valid CID with checksum."
   - name: apd
     type: string
     label: Disable Proxy
@@ -150,8 +148,16 @@ forms:
     description: The provisioning token to use for installing the sensor
     optional: true
     constraints:
-    - must_match_regex: '^[0-9a-fA-F]{8}$'
-      error_message: 'Invalid Provisioning Token format. Please use a valid Provisioning Token.'
+    - must_match_regex: "^[0-9a-fA-F]{8}$"
+      error_message: "Invalid Provisioning Token format. Please use a valid Provisioning Token."
+  - name: provisioning_wait_time
+    type: string
+    label: Provisioning Wait Time (Windows Only)
+    description: Time to wait, in milliseconds, for sensor to provision
+    optional: true
+    constraints:
+    - must_match_regex: "^[0-9]*$"
+      error_message: "Invalid Provisioning Wait Time format. Please use a valid Provisioning Wait Time in milliseconds."
   - name: tags
     type: string
     label: Tags
@@ -210,16 +216,16 @@ forms:
 # or added to the tile separately using a package of type bosh-release.
 
 runtime_configs:
-- name: falcon-linux-sensor-config
+- name: falcon-sensor-config
   runtime_config:
     releases:
-    - name: falcon-linux-sensor
+    - name: falcon-sensor
       version: (( .properties.version.value ))
     addons:
     - name: falcon-linux-sensor
       jobs:
       - name: falcon-linux-sensor
-        release: falcon-linux-sensor
+        release: falcon-sensor
         properties:
           oauth:
             client_id: (( .properties.client_id.value ))
@@ -240,3 +246,29 @@ runtime_configs:
         - os: ubuntu-bionic
         - os: ubuntu-xenial
         - os: ubuntu-trusty
+
+    - name: falcon-windows-sensor
+      jobs:
+      - name: falcon-windows-sensor
+        release: falcon-sensor
+        properties:
+          oauth:
+            client_id: (( .properties.client_id.value ))
+            client_secret: (( .properties.client_secret.value ))
+            cloud: (( .properties.cloud.value ))
+          falcon:
+            cid: (( .properties.cid.value ))
+            apd: (( .properties.apd.value ))
+            aph: (( .properties.aph.value ))
+            app: (( .properties.app.value ))
+            provisioning_token: (( .properties.provisioning_token.value ))
+            provisioning_wait_time: (( .properties.provisioning_wait_time.value ))
+            tags: (( .properties.tags.value ))
+            sensor_update_policy: (( .properties.sensor_update_policy.value ))
+          version: (( .properties.version.value ))
+      include:
+        stemcell:
+        - os: windows2012R2
+        - os: windows2016
+        - os: windows1803
+        - os: windows2019
