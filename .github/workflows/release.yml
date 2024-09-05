@@ -11,7 +11,7 @@ permissions:
   contents: write
 
 env:
-  TAG: ${{ github.event.release.tag_name }} 
+  TAG: ${{ github.event.release.tag_name }}
 
 jobs:
   release:
@@ -33,12 +33,20 @@ jobs:
       - name: Download falcon-installer
         run: |
           REL=$(basename $(curl -Ls -o /dev/null -w %{url_effective} https://github.com/CrowdStrike/falcon-installer/releases/latest) | sed s/v//g)
+
+          # Add Linux installer
           curl -sSLo falcon-installer-linux-x86_64.tar.gz https://github.com/CrowdStrike/falcon-installer/releases/latest/download/falcon-installer-${REL}-linux-x86_64.tar.gz
-          tar -xzf falcon-installer-linux-x86_64.tar.gz
-          chmod +x falcon-installer && rm -f falcon-installer-linux-x86_64.tar.gz
-          cp -p falcon-installer final_blobs/falcon-installer
+          tar -xzf falcon-installer-linux-x86_64.tar.gz -C final_blobs/
+          chmod +x final_blobs/falcon-installer && rm -f falcon-installer-linux-x86_64.tar.gz
           bosh add-blob final_blobs/falcon-installer falcon-installer
-          rm final_blobs/falcon-installer
+
+          # Add Windows installer
+          curl -sSLo falcon-installer-windows-x86_64.zip https://github.com/CrowdStrike/falcon-installer/releases/latest/download/falcon-installer-${REL}-windows-x86_64.zip
+          unzip -o falcon-installer-windows-x86_64.zip -d final_blobs/
+          chmod +x final_blobs/falcon-installer.exe && rm -f falcon-installer-windows-x86_64.zip
+          bosh add-blob final_blobs/falcon-installer.exe falcon-installer.exe
+
+          rm final_blobs/{falcon-installer,falcon-installer.exe,README.md,LICENSE}
 
       - name: Set Release Version
         run: |

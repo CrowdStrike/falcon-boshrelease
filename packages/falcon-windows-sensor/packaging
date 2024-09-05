@@ -1,0 +1,3 @@
+$BOSH_INSTALL_TARGET = Resolve-Path "${env:BOSH_INSTALL_TARGET}"
+New-Item -ItemType "directory" -Force "${BOSH_INSTALL_TARGET}"
+copy "falcon-installer.exe" "${BOSH_INSTALL_TARGET}"
