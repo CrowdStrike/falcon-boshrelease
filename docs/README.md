@@ -9,8 +9,8 @@ To successfully deploy the CrowdStrike Falcon Bosh Release, ensure the following
 - **Access to Broadcom Portal**: You must have access to download necessary files from the Broadcom portal.
 - **VMWare Tanzu Operations Manager**: Ensure you have VMWare Tanzu Operations Manager installed.
 - **VMWare Tanzu Application Service Version**: The minimum supported version of VMWare Tanzu Application Service (TAS) is 2.11.
-- **Supported Stemcells**: Currently, all Ubuntu Stemcells are supported.
-- **Proxy Configuration**: If your environment uses a proxy, it must be configured to allow the VMs to communicate with CrowdStrike's cloud. For detailed information, refer to the [Falcon Sensor for Linux System Requirements](https://falcon.crowdstrike.com/documentation/page/edd7717e/falcon-sensor-for-linux-system-requirements#l0523dcd).
+- **Supported Stemcells**: Currently, all Ubuntu and Windows Stemcells are supported.
+- **Proxy Configuration**: If your environment uses a proxy, it must be configured to allow the VMs to communicate with CrowdStrike's cloud. For detailed information, refer to the [Falcon Sensor for Linux System Requirements](https://falcon.crowdstrike.com/documentation/page/edd7717e/falcon-sensor-for-linux-system-requirements#l0523dcd) and/or the [Falcon Sensor for Windows Deployment](https://falcon.crowdstrike.com/documentation/page/ecc97e75/falcon-sensor-for-windows-deployment#e43dade4).
 
 ## Current Limitations
 
@@ -53,6 +53,7 @@ Follow these steps to install CrowdStrike Falcon in your VMWare Tanzu Applicatio
    - **Proxy Host Configuration**: Specify the proxy host for the sensor to communicate with the Falcon cloud.
    - **Proxy Port Configuration**: Specify the proxy port for the sensor to communicate with the Falcon cloud.
    - **Provisioning Token**: Enter the provisioning token for the sensor.
+   - **Provisioning Wait Time**: Enter the provisioning wait time for the sensor. (Windows only)
    - **Tags**: Enter the provisioning token for the sensor. Any sensor tags
    - **Sensor Update Policy**: The name of the sensor update policy for the installer to get the sensor version to install specified by the sensor update policy.
 
@@ -66,10 +67,11 @@ Follow these steps to install CrowdStrike Falcon in your VMWare Tanzu Applicatio
 
 ## Troubleshooting
 
-If you encounter any issues during the deployment process, the following logs will be generated under the directory `/var/vcap/sys/log/falcon-linux-sensor/` on the VMs:
+If you encounter any issues during the deployment process, the following logs will be generated on the VMs:
 
 - **`pre-start.stdout.log`**: This log file captures the standard output of the pre-start script.
 - **`pre-start.stderr.log`**: This log file captures the standard error output of the pre-start script.
 - **`falcon-installer.log`**: This log file contains detailed information about the Falcon sensor installation process. It includes messages about the progress of the installation, any errors encountered, and other relevant details.
 
+These logs can be found under `/var/vcap/sys/log/falcon-linux-sensor/` for Linux VMs and `C:\var\vcap\sys\log\falcon-windows-sensor` for Windows VMs.
 Review these logs for failures as to why the installation and deployment failed. When contacting CrowdStrike support, these logs should be provided.
