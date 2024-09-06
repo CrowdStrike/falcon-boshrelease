@@ -22,7 +22,7 @@ properties:
   value: CrowdStrike
 - name: version
   type: string
-  value: 1.1.0
+  value: 1.2.0
 
 # Specify the packages to be included in your tile.
 # The format of the section to include depends on the type
