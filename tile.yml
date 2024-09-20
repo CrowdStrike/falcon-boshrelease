@@ -112,7 +112,7 @@ forms:
     label: Falcon Cloud Region (e.g. us-1, us-2, eu-1, gov1). Default is autodiscover.
     optional: true
     constraints:
-    - must_match_regex: "^(us-1|us-2|eu-1|gov1|)$"
+    - must_match_regex: "^(us-1|us-2|eu-1|gov1|us-gov-1)$"
       error_message: "Invalid CrowdStrike region. Please provide a valid region or remove the entry for autodiscover."
 
 - name: falcon
