@@ -1,6 +1,6 @@
 # CrowdStrike Falcon Bosh Release
 
-The CrowdStrike Falcon Bosh Release leverages [Cloud Foundry Bosh](https://bosh.io/docs/) as an Addon to facilitate the installation of the Falcon Sensor on each Virtual Machine (VM) through the Falcon APIs. By default, the installer deployed via Bosh will handle the installation, registration of the sensor, and initiation of the service. 
+The CrowdStrike Falcon Bosh Release leverages [Cloud Foundry Bosh](https://bosh.io/docs/) as an [Add-on](https://bosh.io/docs/runtime-config/#addons) to facilitate the installation of the Falcon Sensor on each Virtual Machine (VM) in the Tanzu cluster through the Falcon APIs. By default, the installer deployed via Bosh will handle the installation, registration of the sensor, and initiation of the service. Because the CrowdStrike Falcon Bosh Release functions as a [Bosh Add-on](https://bosh.io/docs/runtime-config/#addons), it does not require a stemcell to be used or configured either by Bosh or in the VMWare Tanzu Operations Manager Stemcell Library because a [Bosh Add-on](https://bosh.io/docs/runtime-config/#addons) runs as a co-located job in each of the already deployed VMs. In other words, no CrowdStrike VM is created that runs in its own Stemcell; instead, CrowdStrike is installed via your deployed applications Stemcells via an install script.
 
 ## Requirements
 
@@ -75,3 +75,9 @@ If you encounter any issues during the deployment process, the following logs wi
 
 These logs can be found under `/var/vcap/sys/log/falcon-linux-sensor/` for Linux VMs and `C:\var\vcap\sys\log\falcon-windows-sensor` for Windows VMs.
 Review these logs for failures as to why the installation and deployment failed. When contacting CrowdStrike support, these logs should be provided.
+
+## Frequently Asked Questions (FAQs)
+
+### Does CrowdStrike use Stemcells for deployment and is the Stemcell version configurable via the Stemcell Library?
+
+At this point in time for the 1.x versions, Stemcells are not used at all for deploying the CrowdStrike sensor to your running VMs. This means setting any Stemcell version in the Stemcell Library does nothing since we do not use Stemcells for deployment. Currently, the CrowdStrike Bosh Tile only is a Bosh Addon which runs as a job co-located on each of the existing VMs in your Tanzu TAS deployment. This means that you can leave the CrowdStrike Falcon listing in the Stemcell library without configuring a Stemcell version.
