@@ -6,7 +6,7 @@ The CrowdStrike Falcon Bosh Release leverages [Cloud Foundry Bosh](https://bosh.
 
 To successfully deploy the CrowdStrike Falcon Bosh Release, ensure the following prerequisites are met:
 
-- **Access to Broadcom Portal**: You must have access to download necessary files from the Broadcom portal.
+- **Access to Broadcom Portal**: You must have access to download necessary files from the [Broadcom Support portal](https://support.broadcom.com/group/ecx/productdownloads?subfamily=CrowdStrike%20Falcon%20for%20VMware%20Tanzu.
 - **VMWare Tanzu Operations Manager**: Ensure you have VMWare Tanzu Operations Manager installed.
 - **VMWare Tanzu Application Service Version**: The minimum supported version of VMWare Tanzu Application Service (TAS) is 2.11.
 - **Supported Stemcells**: Currently, all Ubuntu and Windows Stemcells are supported.
