@@ -21,14 +21,15 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install bosh-cli and tile
+      - name: Install bosh-cli and kiln
         run: |
           BOSHREL=$(basename $(curl -Ls -o /dev/null -w %{url_effective} https://github.com/cloudfoundry/bosh-cli/releases/latest) | sed s/v//g)
           curl -sSLo /tmp/bosh https://github.com/cloudfoundry/bosh-cli/releases/latest/download/bosh-cli-${BOSHREL}-linux-amd64
           chmod +x /tmp/bosh && sudo mv /tmp/bosh /usr/local/bin/bosh
 
-          curl -sSLo /tmp/tile https://github.com/cf-platform-eng/tile-generator/releases/latest/download/tile_linux-64bit
-          chmod +x /tmp/tile && sudo mv /tmp/tile /usr/local/bin/tile
+          KILNREL=$(basename $(curl -Ls -o /dev/null -w %{url_effective} https://github.com/pivotal-cf/kiln/releases/latest) | sed s/v//g)
+          curl -sSLo /tmp/kiln https://github.com/pivotal-cf/kiln/releases/latest/download/kiln-linux-amd64-${KILNREL}
+          chmod +x /tmp/kiln && sudo mv /tmp/kiln /usr/local/bin/kiln
 
       - name: Download falcon-installer
         run: |
@@ -54,18 +55,18 @@ jobs:
 
       - name: Create bosh release
         run: |
-          bosh create-release --force --final --tarball=resources/falcon-boshrelease.tgz --version ${VERSION}
+          bosh create-release --force --final --tarball=tile/releases/falcon-boshrelease.tgz --version ${VERSION}
 
       - name: Create pivotal tile
         run: |
-          sed "s/^[ ]\+value: [0-9][0-9.]*/  value: $VERSION/g" -i tile.yml
-          tile build ${VERSION}
+          sed "s/[0-9][0-9.]*/$VERSION/g" -i tile/version
+          cd tile && kiln bake --skip-fetch --final -o crowdstrike-falcon-cf-${VERSION}.pivotal
 
       - name: Update release artifacts in GitHub
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add final_blobs config releases tile.yml tile-history.yml
+          git add final_blobs config releases tile
           git commit -m "Updating release components for ${TAG}"
           git push origin HEAD:${{ github.event.release.target_commitish }}
           git tag -f "${GITHUB_REF#refs/tags/}"
@@ -73,6 +74,6 @@ jobs:
 
       - name: Update artifacts to release
         run: |
-          gh release upload $TAG resources/falcon-boshrelease.tgz product/*.pivotal
+          gh release upload $TAG tile/releases/falcon-boshrelease.tgz tile/*.pivotal
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
