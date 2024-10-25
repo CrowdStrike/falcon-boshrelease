@@ -1,0 +1,55 @@
+- name: falcon-sensor-config
+  runtime_config: |
+      addons:
+      - include:
+          stemcell:
+          - os: ubuntu-jammy
+          - os: ubuntu-bionic
+          - os: ubuntu-xenial
+          - os: ubuntu-trusty
+        jobs:
+        - name: falcon-linux-sensor
+          properties:
+            falcon:
+              apd: (( .properties.apd.value ))
+              aph: (( .properties.aph.value ))
+              app: (( .properties.app.value ))
+              cid: (( .properties.cid.value ))
+              provisioning_token: (( .properties.provisioning_token.value ))
+              sensor_update_policy: (( .properties.sensor_update_policy.value ))
+              tags: (( .properties.tags.value ))
+            oauth:
+              client_id: (( .properties.client_id.value ))
+              client_secret: (( .properties.client_secret.value ))
+              cloud: (( .properties.cloud.value ))
+            version: (( .properties.version.value ))
+          release: falcon-sensor
+        name: falcon-linux-sensor
+      - include:
+          stemcell:
+          - os: windows2012R2
+          - os: windows2016
+          - os: windows1803
+          - os: windows2019
+        jobs:
+        - name: falcon-windows-sensor
+          properties:
+            falcon:
+              apd: (( .properties.apd.value ))
+              aph: (( .properties.aph.value ))
+              app: (( .properties.app.value ))
+              cid: (( .properties.cid.value ))
+              provisioning_token: (( .properties.provisioning_token.value ))
+              provisioning_wait_time: (( .properties.provisioning_wait_time.value ))
+              sensor_update_policy: (( .properties.sensor_update_policy.value ))
+              tags: (( .properties.tags.value ))
+            oauth:
+              client_id: (( .properties.client_id.value ))
+              client_secret: (( .properties.client_secret.value ))
+              cloud: (( .properties.cloud.value ))
+            version: (( .properties.version.value ))
+          release: falcon-sensor
+        name: falcon-windows-sensor
+      releases:
+      - name: falcon-sensor
+        version: (( .properties.version.value ))

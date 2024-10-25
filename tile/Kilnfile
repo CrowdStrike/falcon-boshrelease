@@ -1,0 +1,7 @@
+bake_configurations:
+  - tile_name: crowdstrike-falcon-cf
+    forms_directories:
+      - form_types
+    properties_directories:
+      - property_blueprints
+    icon_filepath: resources/crowdstrike-logo.png
