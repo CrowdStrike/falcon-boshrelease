@@ -1,0 +1,58 @@
+---
+description: "Falcon is the CrowdStrike platform purpose-built to stop breaches via a unified set of cloud-delivered technologies that prevent all types of attacks including malware and much more."
+icon_image: $( icon )
+label: CrowdStrike Falcon for VMWare Tanzu
+metadata_version: '1.8'
+minimum_version_for_upgrade: 0.0.1
+name: crowdstrike-falcon-cf
+product_version: $( version )
+rank: 1
+requires_product_versions: null
+serial: true
+service_broker: false
+standalone: false
+
+releases:
+- file: falcon-boshrelease.tgz
+  name: falcon-sensor
+  version: $( version )
+
+property_blueprints:
+- $( property "org")
+- $( property "space")
+- $( property "apply_open_security_group")
+- $( property "allow_paid_service_plans")
+- $( property "author")
+- $( property "version")
+- $( property "client_id")
+- $( property "client_secret")
+- $( property "cloud")
+- $( property "cid")
+- $( property "apd")
+- $( property "aph")
+- $( property "app")
+- $( property "provisioning_token")
+- $( property "provisioning_wait_time")
+- $( property "tags")
+- $( property "sensor_update_policy")
+
+form_types:
+- $( form "oauth")
+- $( form "falcon")
+
+job_types: []
+
+runtime_configs:
+- $( runtime_config "falcon-sensor-config")
+
+post_deploy_errands: []
+pre_delete_errands: []
+update:
+  canaries: 1
+  canary_watch_time: 10000-100000
+  max_in_flight: 1
+  update_watch_time: 10000-100000
+
+provides_product_versions:
+- name: crowdstrike-falcon-cf
+  version: $( version )

@@ -1,0 +1,51 @@
+- name: oauth
+  label: CrowdStrike API Credentials
+  description: CrowdStrike OAuth API Credentials
+  property_inputs:
+    - label: OAuth Client ID
+      description: OAuth Client ID
+      reference: .properties.client_id
+      
+    - label: OAuth Client Secret
+      description: OAuth Client Secret
+      reference: .properties.client_secret
+
+    - label: Falcon Cloud Region (e.g. us-1, us-2, eu-1, gov1). Default is autodiscover.
+      description: Falcon Cloud Region (e.g. us-1, us-2, eu-1, gov1). Default is autodiscover.
+      reference: .properties.cloud
+
+- name: falcon
+  label: Falcon Sensor Settings
+  description: CrowdStrike Falcon Sensor Settings
+  property_inputs:
+    - label: CID
+      description: Falcon Customer ID (CID) with Checksum (Optional)
+      reference: .properties.cid
+
+    - label: Disable Proxy
+      description: Configures if the proxy should be enabled or disabled, By default, the proxy is enabled.
+      reference: .properties.apd
+
+    - label: Proxy host
+      description: The proxy host for the sensor to use when communicating with CrowdStrike
+      reference: .properties.aph
+
+    - label: Proxy Port
+      description: The proxy port for the sensor to use when communicating with CrowdStrike
+      reference: .properties.app
+
+    - label: Provisioning Token
+      description: The provisioning token to use for installing the sensor
+      reference: .properties.provisioning_token
+
+    - label: Provisioning Wait Time (Windows Only)
+      description: Time to wait, in milliseconds, for sensor to provision
+      reference: .properties.provisioning_wait_time
+
+    - label: Tags
+      description: 'Sensor grouping tags are optional, user-defined identifiers that can used to group and filter hosts. Allowed characters: all alphanumerics, ''/'', ''-'', and ''_''.'
+      reference: .properties.tags
+
+    - label: Sensor Update Policy
+      description: Name of the sensor update policy.
+      reference: .properties.sensor_update_policy

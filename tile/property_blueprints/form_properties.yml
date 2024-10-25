@@ -1,0 +1,91 @@
+- name: client_id
+  type: string
+  label: OAuth Client ID
+  optional: false
+  configurable: true
+  constraints:
+  - error_message: Invalid OAuth Client ID format. Please use a valid OAuth Client ID.
+    must_match_regex: ^[a-fA-F0-9]{32}$
+
+- name: client_secret
+  type: secret
+  label: OAuth Client Secret
+  optional: false
+  configurable: true
+  constraints:
+  - error_message: Invalid OAuth Client Secret format. Please use a valid OAuth Client Secret.
+    must_match_regex: ^[a-zA-Z0-9]{40}$
+  
+- name: cloud
+  type: string
+  label: Falcon Cloud Region (e.g. us-1, us-2, eu-1, gov1). Default is autodiscover.
+  optional: true
+  configurable: true
+  constraints:
+  - error_message: Invalid CrowdStrike region. Please provide a valid region or remove the entry for autodiscover.
+    must_match_regex: ^(us-1|us-2|eu-1|gov1|us-gov-1)$
+  
+- name: cid
+  type: string
+  label: CID
+  description: Falcon Customer ID (CID) with Checksum (Optional)
+  optional: true
+  configurable: true
+  constraints:
+  - error_message: Invalid CID format. Please use a valid CID with checksum.
+    must_match_regex: ^[0-9a-fA-F]{32}-[0-9a-fA-F]{2}$
+  
+- name: apd
+  type: string
+  label: Disable Proxy
+  description: Configures if the proxy should be enabled or disabled, By default, the proxy is enabled.
+  optional: true
+  configurable: true
+  
+- name: aph
+  type: string
+  label: Proxy host
+  description: The proxy host for the sensor to use when communicating with CrowdStrike
+  optional: true
+  configurable: true
+  
+- name: app
+  type: string
+  label: Proxy Port
+  description: The proxy port for the sensor to use when communicating with CrowdStrike
+  optional: true
+  configurable: true
+    
+- name: provisioning_token
+  type: string
+  label: Provisioning Token
+  description: The provisioning token to use for installing the sensor
+  configurable: true
+  optional: true
+  constraints:
+  - error_message: Invalid Provisioning Token format. Please use a valid Provisioning Token.
+    must_match_regex: ^[0-9a-fA-F]{8}$
+  
+- name: provisioning_wait_time
+  type: string
+  label: Provisioning Wait Time (Windows Only)
+  description: Time to wait, in milliseconds, for sensor to provision
+  optional: true
+  configurable: true
+  constraints:
+  - error_message: Invalid Provisioning Wait Time format. Please use a valid Provisioning Wait Time in milliseconds.
+    must_match_regex: ^[0-9]*$
+  
+- name: tags
+  type: string
+  label: Tags
+  description: 'Sensor grouping tags are optional, user-defined identifiers that can used to group and filter hosts. Allowed characters: all alphanumerics, ''/'', ''-'', and ''_''.'
+  optional: true
+  configurable: true
+  
+- name: sensor_update_policy
+  type: string
+  label: Sensor Update Policy
+  description: Name of the sensor update policy.
+  optional: true
+  configurable: true

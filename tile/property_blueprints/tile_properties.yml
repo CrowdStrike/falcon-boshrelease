@@ -1,0 +1,32 @@
+- name: org
+  type: string
+  default: crowdstrike-falcon-cf-org
+  configurable: true
+
+- name: space
+  type: string
+  default: crowdstrike-falcon-cf-space
+  configurable: true
+
+- name: apply_open_security_group
+  type: boolean
+  default: true
+  configurable: true
+
+- name: allow_paid_service_plans
+  type: boolean
+  default: false
+  configurable: true
+
+- name: author
+  label: Author
+  type: string
+  default: CrowdStrike
+  optional: false
+  configurable: false
+
+- name: version
+  type: string
+  optional: false
+  configurable: false
+  default: $( version )
