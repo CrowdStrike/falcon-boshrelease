@@ -6,7 +6,6 @@
           - os: ubuntu-jammy
           - os: ubuntu-bionic
           - os: ubuntu-xenial
-          - os: ubuntu-trusty
         jobs:
         - name: falcon-linux-sensor
           properties:
