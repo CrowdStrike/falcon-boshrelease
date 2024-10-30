@@ -5,7 +5,7 @@
     - label: OAuth Client ID
       description: OAuth Client ID
       reference: .properties.client_id
-      
+
     - label: OAuth Client Secret
       description: OAuth Client Secret
       reference: .properties.client_secret
@@ -23,7 +23,7 @@
       reference: .properties.cid
 
     - label: Disable Proxy
-      description: Configures if the proxy should be enabled or disabled, By default, the proxy is enabled.
+      description: Disable the sensor proxy settings.
       reference: .properties.apd
 
     - label: Proxy host
@@ -43,7 +43,7 @@
       reference: .properties.provisioning_wait_time
 
     - label: Tags
-      description: 'Sensor grouping tags are optional, user-defined identifiers that can used to group and filter hosts. Allowed characters: all alphanumerics, ''/'', ''-'', and ''_''.'
+      description: "Sensor grouping tags are optional, user-defined identifiers that can used to group and filter hosts. Allowed characters: all alphanumerics, '/', '-', and '_'."
       reference: .properties.tags
 
     - label: Sensor Update Policy
