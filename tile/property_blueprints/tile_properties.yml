@@ -24,9 +24,3 @@
   default: CrowdStrike
   optional: false
   configurable: false
-
-- name: version
-  type: string
-  optional: false
-  configurable: false
-  default: $( version )

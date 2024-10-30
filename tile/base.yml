@@ -2,8 +2,8 @@
 description: "Falcon is the CrowdStrike platform purpose-built to stop breaches via a unified set of cloud-delivered technologies that prevent all types of attacks including malware and much more."
 icon_image: $( icon )
 label: CrowdStrike Falcon for VMWare Tanzu
-metadata_version: '1.8'
-minimum_version_for_upgrade: 0.0.1
+metadata_version: 1.8
+minimum_version_for_upgrade: 1.2.0
 name: crowdstrike-falcon-cf
 product_version: $( version )
 rank: 1
@@ -23,7 +23,6 @@ property_blueprints:
 - $( property "apply_open_security_group")
 - $( property "allow_paid_service_plans")
 - $( property "author")
-- $( property "version")
 - $( property "client_id")
 - $( property "client_secret")
 - $( property "cloud")
