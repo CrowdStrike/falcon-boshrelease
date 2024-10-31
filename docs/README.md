@@ -78,6 +78,14 @@ Review these logs for failures as to why the installation and deployment failed.
 
 ## Frequently Asked Questions (FAQs)
 
+### When the CrowdStrike Tanzu tile is uninstalled, will the CrowdStrike sensor also uninstall?
+
+Currently uninstalling the sensor, including the `.deb` package, when the tile is uninstalled, is currently unsupported.
+
 ### Does CrowdStrike use Stemcells for deployment and is the Stemcell version configurable via the Stemcell Library?
 
 At this point in time for the 1.x versions, Stemcells are not used at all for deploying the CrowdStrike sensor to your running VMs. This means setting any Stemcell version in the Stemcell Library does nothing since we do not use Stemcells for deployment. Currently, the CrowdStrike Bosh Tile only is a Bosh Addon which runs as a job co-located on each of the existing VMs in your Tanzu TAS deployment. This means that you can leave the CrowdStrike Falcon listing in the Stemcell library without configuring a Stemcell version.
+
+### How do I upgrade from version 1.1.0 to a later version?
+
+Currently, upgrading from version 1.1.0 requires a reinstall of the entire tile. When the tile is reinstalled, the sensor will not 
