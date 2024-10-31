@@ -3,19 +3,19 @@ $FALCON_ARGS=""
     $FALCON_ARGS += " --cid=<%= p('falcon.cid') %>"
 <% end -%>
 <% if p("falcon.apd", nil) -%>
-    $FALCON_ARGS += " --apd=<%= p('falcon.apd') %>"
+    $FALCON_ARGS += " --disable-proxy"
 <% end -%>
 <% if p("falcon.app", nil) -%>
-    $FALCON_ARGS += " --app=<%= p('falcon.app') %>"
+    $FALCON_ARGS += " --proxy-port=<%= p('falcon.app') %>"
 <% end -%>
 <% if p("falcon.aph", nil) -%>
-    $FALCON_ARGS += " --aph=<%= p('falcon.aph') %>"
+    $FALCON_ARGS += " --proxy-host=<%= p('falcon.aph') %>"
 <% end -%>
 <% if p("falcon.provisioning_token", nil) -%>
-    $FALCON_ARGS += " --provisioning_token=<%= p('falcon.provisioning_token') %>"
+    $FALCON_ARGS += " --provisioning-token=<%= p('falcon.provisioning_token') %>"
 <% end -%>
 <% if p("falcon.provisioning_wait_time", nil) -%>
-    $FALCON_ARGS += " --provisioning_wait_time=<%= p('falcon.provisioning_wait_time') %>"
+    $FALCON_ARGS += " --provisioning-wait-time=<%= p('falcon.provisioning_wait_time') %>"
 <% end -%>
 <% if p("falcon.tags", nil) -%>
     $FALCON_ARGS += " --tags=<%= p('falcon.tags') %>"
@@ -31,7 +31,7 @@ if (-Not (Get-Service | Where-Object { $_.Name -eq 'CSFalconService' })) {
     $FALCON_ARGS += " --sensor-update-policy=<%= p('falcon.sensor_update_policy') %>"
     <% end -%>
 
-    $FALCON_ARGS += " --user-agent=falcon-boshrelease/<%= p('version') %> --verbose --enable-logging --tmpdir C:\var\vcap\sys\log\falcon-windows-sensor"
+    $FALCON_ARGS += " --user-agent=falcon-boshrelease/<%= p('version') %> --verbose --enable-file-logging --tmpdir C:\var\vcap\sys\log\falcon-windows-sensor"
 
     $process = (Start-Process -FilePath "C:\var\vcap\packages\falcon-windows-sensor\falcon-installer.exe" -ArgumentList $FALCON_ARGS -PassThru -NoNewWindow)
     Wait-Process -Id $process.Id
