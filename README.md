@@ -5,7 +5,7 @@ This project provides a Bosh release and Cloud Foundry tile for installing Crowd
 ## Getting Started
 
 > [!WARNING]
-> Only VMWare Tanzu Application Service (TAS) is supported at this time.
+> Only deploying with VMWare Tanzu Operations Manager for VMWare Tanzu Application Service (TAS) Bosh-based installs is supported.
 
 To install the CrowdStrike Sensor via VMware Tanzu Operations Manager, follow these steps:
 

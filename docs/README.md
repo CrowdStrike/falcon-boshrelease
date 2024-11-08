@@ -14,7 +14,8 @@ To successfully deploy the CrowdStrike Falcon Bosh Release, ensure the following
 
 ## Current Limitations
 
-It is important to note that since the Bosh job operates as an Addon rather than a deployment, uninstalling the sensor, including the `.deb` package, when the tile is uninstalled, is currently unsupported.
+> [!IMPORTANT]
+> Since the Bosh job operates as an Addon rather than a deployment, uninstalling the sensor, including the `.deb` package, when the tile is uninstalled, is currently unsupported.
 
 ## Falcon API Permissions
 
@@ -74,7 +75,16 @@ If you encounter any issues during the deployment process, the following logs wi
 - **`falcon-installer.log`**: This log file contains detailed information about the Falcon sensor installation process. It includes messages about the progress of the installation, any errors encountered, and other relevant details.
 
 These logs can be found under `/var/vcap/sys/log/falcon-linux-sensor/` for Linux VMs and `C:\var\vcap\sys\log\falcon-windows-sensor` for Windows VMs.
-Review these logs for failures as to why the installation and deployment failed. When contacting CrowdStrike support, these logs should be provided.
+
+In addition to the VM logs, please also provide the following Tanzu Operations Manager information:
+
+- The `crowdstrike-falcon-cf` product metadata at https://tanzuops.manager/debug/product_metadata replacing `tanzuops.manager` with the address of your Tanzu Operations Manager.
+- The `crowdstrike-falcon-cf` runtime configuration at https://tanzuops.manager/debug/files replacing `tanzuops.manager` with the address of your Tanzu Operations Manager.
+
+Review these logs for failures as to why the installation and deployment failed. When contacting CrowdStrike support or creating a GitHub, these logs should be provided.
+
+> [!IMPORTANT]
+> When providing logs, please make sure to sanitize the output and do not provide any credentials.
 
 ## Frequently Asked Questions (FAQs)
 
@@ -88,4 +98,4 @@ At this point in time for the 1.x versions, Stemcells are not used at all for de
 
 ### How do I upgrade from version 1.1.0 to a later version?
 
-Currently, upgrading from version 1.1.0 requires a reinstall of the entire tile. When the tile is reinstalled, the sensor will not 
+Currently, upgrading from version 1.1.0 requires a reinstall of the entire tile. When the tile is reinstalled, the sensor will not be uninstalled.
