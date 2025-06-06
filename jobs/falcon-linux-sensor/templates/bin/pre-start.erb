@@ -45,7 +45,7 @@ if [[ -f /opt/CrowdStrike/falconctl ]]; then
     FALCON_ARGS+=" --apd=<%= p('falcon.apd') %>"
 <% end -%>
 <% if p("falcon.aph", nil) -%>
-    FALCON_ARGS+=" --apd=false %>"
+    FALCON_ARGS+=" --apd=false"
     FALCON_ARGS+=" --aph=<%= p('falcon.aph') %>"
 <% end -%>
 <% if p("falcon.app", nil) -%>
