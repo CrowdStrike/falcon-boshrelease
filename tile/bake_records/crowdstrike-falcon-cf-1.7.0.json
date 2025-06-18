@@ -1,0 +1,8 @@
+{
+  "source_revision": "63593f7837a265b50feeb58379b36070e42a3dc8",
+  "version": "1.7.0",
+  "kiln_version": "0.105.0",
+  "tile_name": "crowdstrike-falcon-cf",
+  "file_checksum": "f29f6a51dd83204f06faa11468fec1bd6e3502e3dacf4e4c54479f0abe2555f2",
+  "tile_directory": "tile"
+}
