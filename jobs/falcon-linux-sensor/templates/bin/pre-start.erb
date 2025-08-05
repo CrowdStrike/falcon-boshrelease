@@ -19,6 +19,7 @@ FALCON_ARGS+=" --tags=<%= p('falcon.tags') %>"
 
 if [[ ! -f /opt/CrowdStrike/falconctl ]]; then
     FALCON_PROXY_ARGS=""
+    FALCON_PROXY_ENV=""
     export FALCON_CLIENT_ID="<%= p('oauth.client_id') %>"
     export FALCON_CLIENT_SECRET="<%= p('oauth.client_secret') %>"
 <% if p("oauth.cloud", nil) -%>
@@ -30,14 +31,16 @@ if [[ ! -f /opt/CrowdStrike/falconctl ]]; then
 <% if p("falcon.apd", nil) -%>
     FALCON_PROXY_ARGS+=" --disable-proxy"
 <% end -%>
-<% if p("falcon.app", nil) -%>
-    FALCON_PROXY_ARGS+=" --proxy-port=<%= p('falcon.app') %>"
-<% end -%>
 <% if p("falcon.aph", nil) -%>
     FALCON_PROXY_ARGS+=" --proxy-host=<%= p('falcon.aph') %>"
+    FALCON_PROXY_ENV+="<%= p('falcon.aph') %>"
+<% end -%>
+<% if p("falcon.app", nil) -%>
+    FALCON_PROXY_ARGS+=" --proxy-port=<%= p('falcon.app') %>"
+    FALCON_PROXY_ENV+=":<%= p('falcon.app') %>"
 <% end -%>
 
-    /var/vcap/packages/falcon-linux-sensor/falcon-installer --user-agent="falcon-boshrelease/<%= p('version') %>" --verbose --enable-file-logging --tmpdir /var/vcap/sys/log/falcon-linux-sensor/ ${FALCON_ARGS}${FALCON_PROXY_ARGS}
+   https_proxy=$FALCON_PROXY_ENV /var/vcap/packages/falcon-linux-sensor/falcon-installer --user-agent="falcon-boshrelease/<%= p('version') %>" --verbose --enable-file-logging --tmpdir /var/vcap/sys/log/falcon-linux-sensor/ ${FALCON_ARGS}${FALCON_PROXY_ARGS}
 fi
 
 if [[ -f /opt/CrowdStrike/falconctl ]]; then
