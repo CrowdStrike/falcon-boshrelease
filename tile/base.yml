@@ -34,6 +34,7 @@ property_blueprints:
 - $( property "provisioning_wait_time")
 - $( property "tags")
 - $( property "sensor_update_policy")
+- $( property "installer_proxy_system_bypass")
 
 form_types:
 - $( form "oauth")

@@ -3,6 +3,7 @@ name: falcon-linux-sensor
 
 templates:
   bin/pre-start.erb: bin/pre-start
+  config/config.yaml.erb: config/config.yaml
 
 packages:
   - falcon-linux-sensor
@@ -16,6 +17,8 @@ properties:
     description: Falcon Cloud Region
   falcon.cid:
     description: Falcon Customer ID (CID) with Checksum (Optional)
+  falcon.installer_proxy_system_bypass:
+    description: Bypass the instance's system proxy for the installer to use when communicating with CrowdStrike
   falcon.apd:
     description: Configures if the proxy should be enabled or disabled, By default, the proxy is enabled.
   falcon.aph:

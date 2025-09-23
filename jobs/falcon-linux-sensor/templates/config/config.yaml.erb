@@ -1,0 +1,29 @@
+---
+# Falcon Installer YAML Configuration
+# Generated from BOSH job properties
+client_id: <%= p('oauth.client_id') %>
+client_secret: <%= p('oauth.client_secret') %>
+<% if p("oauth.cloud", nil) -%>
+cloud: <%= p('oauth.cloud') %>
+<% end -%>
+<% if p("falcon.cid", nil) -%>
+cid: <%= p('falcon.cid') %>
+<% end -%>
+<% if p("falcon.provisioning_token", nil) -%>
+provisioning_token: <%= p('falcon.provisioning_token') %>
+<% end -%>
+<% if p("falcon.tags", nil) -%>
+tags: "<%= p('falcon.tags') %>"
+<% end -%>
+<% if p("falcon.sensor_update_policy", nil) -%>
+sensor_update_policy: <%= p('falcon.sensor_update_policy') %>
+<% end -%>
+<% if p("falcon.apd", nil) -%>
+disable_proxy: true
+<% end -%>
+<% if p("falcon.aph", nil) -%>
+proxy_host: <%= p('falcon.aph') %>
+<% end -%>
+<% if p("falcon.app", nil) -%>
+proxy_port: <%= p('falcon.app') %>
+<% end -%>
