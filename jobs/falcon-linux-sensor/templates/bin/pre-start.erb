@@ -6,41 +6,36 @@ set -u # report the usage of uninitialized variables
 exec 1>> /var/vcap/sys/log/falcon-linux-sensor/pre-start.stdout.log
 exec 2>> /var/vcap/sys/log/falcon-linux-sensor/pre-start.stderr.log
 
-FALCON_ARGS=""
-<% if p("falcon.cid", nil) -%>
-FALCON_ARGS+=" --cid=<%= p('falcon.cid') %>"
-<% end -%>
-<% if p("falcon.provisioning_token", nil) -%>
-FALCON_ARGS+=" --provisioning-token=<%= p('falcon.provisioning_token') %>"
-<% end -%>
-<% if p("falcon.tags", nil) -%>
-FALCON_ARGS+=" --tags=<%= p('falcon.tags') %>"
-<% end -%>
-
 if [[ ! -f /opt/CrowdStrike/falconctl ]]; then
-    FALCON_PROXY_ARGS=""
-    export FALCON_CLIENT_ID="<%= p('oauth.client_id') %>"
-    export FALCON_CLIENT_SECRET="<%= p('oauth.client_secret') %>"
-<% if p("oauth.cloud", nil) -%>
-    export FALCON_CLOUD="<%= p('oauth.cloud') %>"
-<% end -%>
-<% if p("falcon.sensor_update_policy", nil) -%>
-    export FALCON_SENSOR_UPDATE_POLICY_NAME="<%= p('falcon.sensor_update_policy') %>"
-<% end -%>
-<% if p("falcon.apd", nil) -%>
-    FALCON_PROXY_ARGS+=" --disable-proxy"
-<% end -%>
-<% if p("falcon.app", nil) -%>
-    FALCON_PROXY_ARGS+=" --proxy-port=<%= p('falcon.app') %>"
-<% end -%>
-<% if p("falcon.aph", nil) -%>
-    FALCON_PROXY_ARGS+=" --proxy-host=<%= p('falcon.aph') %>"
+    PROXY=""
+<% if p("falcon.installer_proxy_system_bypass", nil) -%>
+  <% if p("falcon.aph", nil) -%>
+    PROXY="<%= p('falcon.aph') %>"
+  <% end -%>
+  <% if p("falcon.app", nil) -%>
+    PROXY+=":<%= p('falcon.app') %>"
+  <% end -%>
 <% end -%>
 
-    /var/vcap/packages/falcon-linux-sensor/falcon-installer --user-agent="falcon-boshrelease/<%= p('version') %>" --verbose --enable-file-logging --tmpdir /var/vcap/sys/log/falcon-linux-sensor/ ${FALCON_ARGS}${FALCON_PROXY_ARGS}
+    INSTALLER_CMD="/var/vcap/packages/falcon-linux-sensor/falcon-installer --config=/var/vcap/jobs/falcon-linux-sensor/config/config.yaml --user-agent=falcon-boshrelease/<%= p('version') %> --verbose --enable-file-logging --tmpdir /var/vcap/sys/log/falcon-linux-sensor/"
+    if [ -n "$PROXY" ]; then
+        https_proxy=$PROXY $INSTALLER_CMD
+    else
+        $INSTALLER_CMD
+    fi
 fi
 
 if [[ -f /opt/CrowdStrike/falconctl ]]; then
+    FALCON_ARGS=""
+<% if p("falcon.cid", nil) -%>
+    FALCON_ARGS+=" --cid=<%= p('falcon.cid') %>"
+<% end -%>
+<% if p("falcon.provisioning_token", nil) -%>
+    FALCON_ARGS+=" --provisioning-token=<%= p('falcon.provisioning_token') %>"
+<% end -%>
+<% if p("falcon.tags", nil) -%>
+    FALCON_ARGS+=" --tags=<%= p('falcon.tags') %>"
+<% end -%>
 <% if p("falcon.apd", nil) -%>
     FALCON_ARGS+=" --apd=<%= p('falcon.apd') %>"
 <% end -%>

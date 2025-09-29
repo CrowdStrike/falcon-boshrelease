@@ -26,6 +26,10 @@
       description: Disable the sensor proxy settings.
       reference: .properties.apd
 
+    - label: Use Sensor Proxy
+      description: Use the sensor proxy settings instead of the system proxy during installation.
+      reference: .properties.installer_proxy_system_bypass
+
     - label: Proxy host
       description: The proxy host for the sensor to use when communicating with CrowdStrike
       reference: .properties.aph

@@ -1,38 +1,23 @@
-$FALCON_ARGS=""
-<% if p("falcon.cid", nil) -%>
-    $FALCON_ARGS += " --cid=<%= p('falcon.cid') %>"
-<% end -%>
-<% if p("falcon.apd", nil) -%>
-    $FALCON_ARGS += " --disable-proxy"
-<% end -%>
-<% if p("falcon.app", nil) -%>
-    $FALCON_ARGS += " --proxy-port=<%= p('falcon.app') %>"
-<% end -%>
-<% if p("falcon.aph", nil) -%>
-    $FALCON_ARGS += " --proxy-host=<%= p('falcon.aph') %>"
-<% end -%>
-<% if p("falcon.provisioning_token", nil) -%>
-    $FALCON_ARGS += " --provisioning-token=<%= p('falcon.provisioning_token') %>"
-<% end -%>
-<% if p("falcon.provisioning_wait_time", nil) -%>
-    $FALCON_ARGS += " --provisioning-wait-time=<%= p('falcon.provisioning_wait_time') %>"
-<% end -%>
-<% if p("falcon.tags", nil) -%>
-    $FALCON_ARGS += " --tags=<%= p('falcon.tags') %>"
-<% end -%>
-
 if (-Not (Get-Service | Where-Object { $_.Name -eq 'CSFalconService' })) {
-    $FALCON_ARGS += " --client-id=<%= p('oauth.client_id') %>"
-    $FALCON_ARGS += " --client-secret=<%= p('oauth.client_secret') %>"
-    <% if p("oauth.cloud", nil) -%>
-    $FALCON_ARGS += " --cloud=<%= p('oauth.cloud') %>"
-    <% end -%>
-    <% if p("falcon.sensor_update_policy", nil) -%>
-    $FALCON_ARGS += " --sensor-update-policy=<%= p('falcon.sensor_update_policy') %>"
-    <% end -%>
+    $PROXY = ""
+<% if p("falcon.installer_proxy_system_bypass", nil) -%>
+  <% if p("falcon.aph", nil) -%>
+    $ROXY += "<%= p('falcon.aph') %>"
+  <% end -%>
+  <% if p("falcon.app", nil) -%>
+    $PROXY += ":<%= p('falcon.app') %>"
+  <% end -%>
+<% end -%>
 
-    $FALCON_ARGS += " --user-agent=falcon-boshrelease/<%= p('version') %> --verbose --enable-file-logging --tmpdir C:\var\vcap\sys\log\falcon-windows-sensor"
-
-    $process = (Start-Process -FilePath "C:\var\vcap\packages\falcon-windows-sensor\falcon-installer.exe" -ArgumentList $FALCON_ARGS -PassThru -NoNewWindow)
-    Wait-Process -Id $process.Id
+    $INSTALLER_ARGS = "--config=C:\var\vcap\jobs\falcon-windows-sensor\config\config.yaml --user-agent=falcon-boshrelease/<%= p('version') %> --verbose --enable-file-logging --tmpdir C:\var\vcap\sys\log\falcon-windows-sensor"
+    if ($PROXY -ne "") {
+        $oldProxy = $env:https_proxy
+        $env:https_proxy = $PROXY
+        $process = (Start-Process -FilePath "C:\var\vcap\packages\falcon-windows-sensor\falcon-installer.exe" -ArgumentList $INSTALLER_ARGS -PassThru -NoNewWindow)
+        Wait-Process -Id $process.Id
+        $env:https_proxy = $oldProxy
+    } else {
+        $process = (Start-Process -FilePath "C:\var\vcap\packages\falcon-windows-sensor\falcon-installer.exe" -ArgumentList $INSTALLER_ARGS -PassThru -NoNewWindow)
+        Wait-Process -Id $process.Id
+    }
 }
