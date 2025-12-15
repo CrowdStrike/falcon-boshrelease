@@ -1,0 +1,126 @@
+name: Build Release Artifacts
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to build based on the tag that will be created (e.g., 1.8.0)'
+        required: true
+        type: string
+
+# Build jobs need permissions to read repository contents and create pull requests
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          fetch-depth: 0
+
+      - name: Install bosh-cli and kiln
+        run: |
+          BOSHREL=$(basename $(curl -Ls -o /dev/null -w %{url_effective} https://github.com/cloudfoundry/bosh-cli/releases/latest) | sed s/v//g)
+          curl -sSLo /tmp/bosh https://github.com/cloudfoundry/bosh-cli/releases/latest/download/bosh-cli-${BOSHREL}-linux-amd64
+          chmod +x /tmp/bosh && sudo mv /tmp/bosh /usr/local/bin/bosh
+
+          KILNREL=$(basename $(curl -Ls -o /dev/null -w %{url_effective} https://github.com/pivotal-cf/kiln/releases/latest) | sed s/v//g)
+          curl -sSLo /tmp/kiln https://github.com/pivotal-cf/kiln/releases/latest/download/kiln-linux-amd64-${KILNREL}
+          chmod +x /tmp/kiln && sudo mv /tmp/kiln /usr/local/bin/kiln
+
+      - name: Set version from input
+        run: |
+          # Strip 'v' prefix from version if present
+          VERSION="${{ github.event.inputs.version }}"
+          VERSION="${VERSION#v}"
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "TAG=v${VERSION}" >> $GITHUB_ENV
+
+      - name: Check if version already exists
+        run: |
+          if git tag -l | grep -q "^${TAG}$"; then
+            echo "Version ${TAG} already exists, skipping build"
+            echo "SKIP_BUILD=true" >> $GITHUB_ENV
+          else
+            echo "SKIP_BUILD=false" >> $GITHUB_ENV
+          fi
+
+      - name: Download falcon-installer
+        if: env.SKIP_BUILD == 'false'
+        run: |
+          REL=$(basename $(curl -Ls -o /dev/null -w %{url_effective} https://github.com/CrowdStrike/falcon-installer/releases/latest) | sed s/v//g)
+
+          # Add Linux installer
+          curl -sSLo falcon-installer-linux-x86_64.tar.gz https://github.com/CrowdStrike/falcon-installer/releases/latest/download/falcon-installer-${REL}-linux-x86_64.tar.gz
+          tar -xzf falcon-installer-linux-x86_64.tar.gz -C final_blobs/
+          chmod +x final_blobs/falcon-installer && rm -f falcon-installer-linux-x86_64.tar.gz
+          bosh add-blob final_blobs/falcon-installer falcon-installer
+
+          # Add Windows installer
+          curl -sSLo falcon-installer-windows-x86_64.zip https://github.com/CrowdStrike/falcon-installer/releases/latest/download/falcon-installer-${REL}-windows-x86_64.zip
+          unzip -o falcon-installer-windows-x86_64.zip -d final_blobs/
+          chmod +x final_blobs/falcon-installer.exe && rm -f falcon-installer-windows-x86_64.zip
+          bosh add-blob final_blobs/falcon-installer.exe falcon-installer.exe
+
+          rm final_blobs/{falcon-installer,falcon-installer.exe,README.md,LICENSE}
+
+      - name: Create bosh release
+        if: env.SKIP_BUILD == 'false'
+        run: |
+          bosh create-release --force --final --tarball=tile/releases/falcon-boshrelease.tgz --version ${VERSION}
+
+      - name: Create branch and commit changes
+        if: env.SKIP_BUILD == 'false'
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+
+          BRANCH_NAME="update-release-${VERSION}"
+          git checkout -b "${BRANCH_NAME}"
+
+          git add final_blobs config releases tile
+          git commit -m "Update release components for ${TAG}
+
+          - Updated falcon-installer to latest version
+          - Created bosh release ${VERSION}"
+
+          git push origin "${BRANCH_NAME}"
+
+          echo "BRANCH_NAME=${BRANCH_NAME}" >> $GITHUB_ENV
+
+      - name: Create Pull Request
+        if: env.SKIP_BUILD == 'false'
+        run: |
+          gh pr create \
+            --title "Update release components for ${TAG}" \
+            --body "This PR updates the release components for version ${VERSION}:
+
+          - Updated falcon-installer to latest version
+          - Created bosh release ${VERSION}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Output summary
+        run: |
+          if [ "$SKIP_BUILD" = "true" ]; then
+            echo "## Build Skipped" >> $GITHUB_STEP_SUMMARY
+            echo "Version ${TAG} already exists, no build was performed." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "## Artifacts Built Successfully" >> $GITHUB_STEP_SUMMARY
+            echo "- Version: ${VERSION}" >> $GITHUB_STEP_SUMMARY
+            echo "- Branch: ${BRANCH_NAME}" >> $GITHUB_STEP_SUMMARY
+            echo "- Bosh release: tile/releases/falcon-boshrelease.tgz" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "A pull request has been created. After merging, create a release with tag ${TAG}." >> $GITHUB_STEP_SUMMARY
+          fi

@@ -5,7 +5,6 @@ tmp
 .DS_Store
 
 *.tar.gz
-*.tgz
 .dev_builds/
 .blobs/
 blobs/
@@ -15,7 +14,6 @@ config/private.yml
 metadata
 product/
 release/
-releases/*.tgz
 *.pivotal
 
 *.zip
