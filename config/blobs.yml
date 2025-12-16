@@ -1,6 +1,6 @@
 falcon-installer:
-  size: 73535672
-  sha: sha256:0c8c98a62c64852c54e2fa3eb7ae9ea7c7e95439374dc1aa458081b1f626f1d6
+  size: 81318072
+  sha: sha256:b1dedda29694b5e4cc74eb17e80bb48c1f59e3061907f8cf3e85ae11e78d6f63
 falcon-installer.exe:
-  size: 75309568
-  sha: sha256:c4e2fb588e9f731064dcf8338d8bfef53fd2caddc488d17bf626cfcfdc9da09b
+  size: 83260416
+  sha: sha256:ab1f475d97a2ae4eb982a4f430005f72abd91769696707fa464e037141565f5e
