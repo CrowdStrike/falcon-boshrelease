@@ -17,7 +17,7 @@ if [[ ! -f /opt/CrowdStrike/falconctl ]]; then
   <% end -%>
 <% end -%>
 
-    INSTALLER_CMD="/var/vcap/packages/falcon-linux-sensor/falcon-installer --config=/var/vcap/jobs/falcon-linux-sensor/config/config.yaml --user-agent=falcon-boshrelease/<%= p('version') %> --verbose --enable-file-logging --tmpdir /var/vcap/sys/log/falcon-linux-sensor/"
+    INSTALLER_CMD="/var/vcap/packages/falcon-linux-sensor/falcon-installer --config=/var/vcap/jobs/falcon-linux-sensor/config/config.yaml --user-agent=falcon-boshrelease/<%= p('version') %> --verbose --enable-file-logging --tmpdir /var/vcap/data/falcon-linux-sensor/tmp/"
     if [ -n "$PROXY" ]; then
         https_proxy=$PROXY $INSTALLER_CMD
     else
