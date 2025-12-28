@@ -29,6 +29,34 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Validate version input
+        env:
+          VERSION_INPUT: ${{ github.event.inputs.version }}
+        run: |
+          # Strip 'v' prefix from version if present for validation
+          VERSION="${VERSION_INPUT#v}"
+
+          # Validate semantic version format (X.Y.Z where X, Y, Z are numbers)
+          if ! echo "$VERSION" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' > /dev/null; then
+            echo "Error: Version must follow semantic versioning format (X.Y.Z)"
+            echo "Provided: $VERSION_INPUT"
+            echo "Expected format examples: 1.8.0, v1.8.0, 2.0.1"
+            exit 1
+          fi
+
+          # Validate that version components are reasonable (not too large)
+          MAJOR=$(echo "$VERSION" | cut -d. -f1)
+          MINOR=$(echo "$VERSION" | cut -d. -f2)
+          PATCH=$(echo "$VERSION" | cut -d. -f3)
+
+          if [ "$MAJOR" -gt 999 ] || [ "$MINOR" -gt 999 ] || [ "$PATCH" -gt 999 ]; then
+            echo "Error: Version components must be <= 999"
+            echo "Provided: $VERSION (Major: $MAJOR, Minor: $MINOR, Patch: $PATCH)"
+            exit 1
+          fi
+
+          echo "Version validation passed: $VERSION"
+
       - name: Install bosh-cli and kiln
         run: |
           BOSHREL=$(basename $(curl -Ls -o /dev/null -w %{url_effective} https://github.com/cloudfoundry/bosh-cli/releases/latest) | sed s/v//g)
@@ -40,10 +68,11 @@ jobs:
           chmod +x /tmp/kiln && sudo mv /tmp/kiln /usr/local/bin/kiln
 
       - name: Set version from input
+        env:
+          VERSION_INPUT: ${{ github.event.inputs.version }}
         run: |
           # Strip 'v' prefix from version if present
-          VERSION="${{ github.event.inputs.version }}"
-          VERSION="${VERSION#v}"
+          VERSION="${VERSION_INPUT#v}"
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
           echo "TAG=v${VERSION}" >> $GITHUB_ENV
 
