@@ -9,7 +9,7 @@ if (-Not (Get-Service | Where-Object { $_.Name -eq 'CSFalconService' })) {
   <% end -%>
 <% end -%>
 
-    $INSTALLER_ARGS = "--config=C:\var\vcap\jobs\falcon-windows-sensor\config\config.yaml --user-agent=falcon-boshrelease/<%= p('version') %> --verbose --enable-file-logging --tmpdir C:\var\vcap\sys\log\falcon-windows-sensor"
+    $INSTALLER_ARGS = "--config=C:\var\vcap\jobs\falcon-windows-sensor\config\config.yaml --user-agent=falcon-boshrelease/<%= p('version') %> --verbose --enable-file-logging --tmpdir C:\var\vcap\data\falcon-windows-sensor\tmp"
     if ($PROXY -ne "") {
         $oldProxy = $env:https_proxy
         $env:https_proxy = $PROXY
