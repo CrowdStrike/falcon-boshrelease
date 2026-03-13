@@ -2,7 +2,7 @@ if (-Not (Get-Service | Where-Object { $_.Name -eq 'CSFalconService' })) {
     $PROXY = ""
 <% if p("falcon.installer_proxy_system_bypass", nil) -%>
   <% if p("falcon.aph", nil) -%>
-    $ROXY += "<%= p('falcon.aph') %>"
+    $PROXY += "<%= p('falcon.aph') %>"
   <% end -%>
   <% if p("falcon.app", nil) -%>
     $PROXY += ":<%= p('falcon.app') %>"
