@@ -110,7 +110,7 @@ jobs:
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
 
-          BRANCH_NAME="update-release-${VERSION}"
+          BRANCH_NAME="update-components-${VERSION}"
           git checkout -b "${BRANCH_NAME}"
 
           git add final_blobs config releases tile
