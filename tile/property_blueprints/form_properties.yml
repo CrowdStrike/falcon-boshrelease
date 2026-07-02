@@ -23,7 +23,7 @@
   configurable: true
   constraints:
   - error_message: Invalid CrowdStrike region. Please provide a valid region or remove the entry for autodiscover.
-    must_match_regex: ^(us-1|us-2|eu-1|gov1|us-gov-1)$
+    must_match_regex: ^(us-?1|us-?2|us-?3|eu-?1|gov-?1|gov-?2|us-?gov-?1|us-?gov-?2)$
 
 - name: cid
   type: string
