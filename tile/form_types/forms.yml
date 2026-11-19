@@ -53,3 +53,7 @@
     - label: Sensor Update Policy
       description: Name of the sensor update policy.
       reference: .properties.sensor_update_policy
+
+    - label: Max API Request Attempts
+      description: Attempts per Falcon API request during install. 0 is unlimited. Default is 11.
+      reference: .properties.max_tries

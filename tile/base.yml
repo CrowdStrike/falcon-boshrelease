@@ -35,6 +35,7 @@ property_blueprints:
 - $( property "tags")
 - $( property "sensor_update_policy")
 - $( property "installer_proxy_system_bypass")
+- $( property "max_tries")
 
 form_types:
 - $( form "oauth")

@@ -22,6 +22,7 @@
             provisioning_token: (( .properties.provisioning_token.value ))
             tags: (( .properties.tags.value ))
             sensor_update_policy: (( .properties.sensor_update_policy.value ))
+            max_tries: (( .properties.max_tries.value ))
           version: $( version )
       include:
         stemcell:
@@ -48,6 +49,7 @@
             provisioning_wait_time: (( .properties.provisioning_wait_time.value ))
             tags: (( .properties.tags.value ))
             sensor_update_policy: (( .properties.sensor_update_policy.value ))
+            max_tries: (( .properties.max_tries.value ))
           version: $( version )
       include:
         stemcell:
