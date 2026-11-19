@@ -27,3 +27,6 @@ proxy_host: <%= p('falcon.aph') %>
 <% if p("falcon.app", nil) -%>
 proxy_port: <%= p('falcon.app') %>
 <% end -%>
+<% if p("falcon.max_tries", nil) -%>
+max_tries: <%= p('falcon.max_tries') %>
+<% end -%>

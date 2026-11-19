@@ -30,3 +30,6 @@ proxy_port: <%= p('falcon.app') %>
 <% if p("falcon.provisioning_wait_time", nil) -%>
 provisioning_wait_time: <%= p('falcon.provisioning_wait_time') %>
 <% end -%>
+<% if p("falcon.max_tries", nil) -%>
+max_tries: <%= p('falcon.max_tries') %>
+<% end -%>
